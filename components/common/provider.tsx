@@ -2,6 +2,9 @@
 
 import { ReactNode, useEffect, useState } from "react"
 import { ThemeProvider } from "./theme-provider"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
+const queryClient = new QueryClient()
 
 function Provider({ children }: { children: ReactNode }) {
     const [isMounted, setIsMounted] = useState(false)
@@ -19,7 +22,9 @@ function Provider({ children }: { children: ReactNode }) {
             defaultTheme="system"
             enableSystem
         >
-            {children}
+            <QueryClientProvider client={queryClient}>
+                {children}
+            </QueryClientProvider>
         </ThemeProvider>
     )
 }

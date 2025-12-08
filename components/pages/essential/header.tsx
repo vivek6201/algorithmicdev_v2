@@ -108,7 +108,7 @@ export default function Header() {
                         initial={{ opacity: 0, y: -20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        className="fixed top-24 inset-x-4 z-40 p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl md:hidden"
+                        className="fixed top-24 inset-x-4 z-40 p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl lg:hidden max-w-3xl mx-auto"
                     >
                         <nav className="flex flex-col gap-2">
                             {navItems.map((item) => (
