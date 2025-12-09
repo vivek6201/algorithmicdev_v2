@@ -15,7 +15,7 @@ export const fetchExternalJobs = async () => {
 
 export const fetchJobDetail = async (slug: string) => {
     const { data } = await apiClient<ExternalJobResponse>({
-        endpoint: `/jobs/one/${slug}`,
+        endpoint: `/api/jobs/one/${slug}`,
         method: "GET"
     })
     return data.data

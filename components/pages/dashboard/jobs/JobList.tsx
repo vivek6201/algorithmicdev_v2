@@ -31,7 +31,7 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
     return (
         <div className="flex flex-col gap-6 w-full mx-auto">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
-                <div className="flex flex-col">
+                <div className="flex flex-col mb-5 md:mb-0">
                     <h1 className="text-xl lg:text-2xl font-bold tracking-tight">Explore Jobs</h1>
                     <p className="text-sm md:text-base text-muted-foreground">Find your next opportunity from our curated list of positions.</p>
                 </div>

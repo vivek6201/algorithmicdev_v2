@@ -6,7 +6,7 @@ import { Github, Linkedin, Twitter } from 'lucide-react';
 const Footer = () => {
     return (
         <footer className="bg-white dark:bg-transparent border-t border-gray-200 dark:border-white/10">
-            <div className="max-w-[1400px] w-11/12 mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 py-12">
+            <div className="w-11/12 mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 py-8">
                 {/* Logo + Tagline */}
                 <div className="space-y-4">
                     <Link href="/" className="font-bold text-lg sm:text-xl text-gray-800 dark:text-white flex items-center gap-2 group">
@@ -58,7 +58,7 @@ const Footer = () => {
             </div>
 
             {/* Bottom Copyright */}
-            <div className="py-8 border-t border-gray-100 dark:border-white/5 text-center text-sm text-gray-400 max-w-[1400px] w-11/12 mx-auto">
+            <div className="py-5 border-t border-gray-100 dark:border-white/5 text-center text-sm text-gray-400 max-w-[1400px] w-11/12 mx-auto">
                 &copy; {new Date().getFullYear()} AlgorithmicDev. All rights reserved.
             </div>
         </footer>

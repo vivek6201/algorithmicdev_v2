@@ -2,6 +2,8 @@ import JobList from "@/components/pages/dashboard/jobs/JobList";
 
 export default function page() {
     return (
-        <JobList fetchFor="other" />
+        <div className="min-h-screen">
+            <JobList fetchFor="other" />
+        </div>
     )
 }

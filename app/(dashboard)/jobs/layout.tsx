@@ -7,7 +7,7 @@ export default function JobsLayout({ children }: { children: React.ReactNode }) 
             {/* <aside className="w-full md:w-64 shrink-0 h-full overflow-y-auto">
                 <JobSidebar />
             </aside> */}
-            <main className="flex-1 p-6">
+            <main className="flex-1 p-6 overflow-y-auto">
                 {children}
             </main>
         </div>

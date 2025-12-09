@@ -13,8 +13,7 @@ const navItems = [
     { name: 'Features', href: '#features' },
     { name: 'FAQ', href: '#faq' },
     { name: 'Blogs', href: '/blogs' },
-    { name: 'Jobs', href: '/jobs' },
-    { name: 'About', href: '/about' },
+    { name: 'Jobs', href: '/jobs' }
 ];
 
 export default function Header() {
@@ -124,7 +123,9 @@ export default function Header() {
                                     {item.name}
                                 </Link>
                             ))}
-                            <Button className="w-full rounded-xl">Get Started</Button>
+                            <Link href="/login">
+                                <Button className="w-full rounded-xl">Get Started</Button>
+                            </Link>
                         </nav>
                     </motion.div>
                 )}

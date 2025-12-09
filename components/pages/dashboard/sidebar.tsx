@@ -22,7 +22,9 @@ function Sidebar({ items, className }: SidebarProps) {
 
     return (
         <aside className={cn("hidden md:flex flex-col w-16 h-full bg-sidebar border-r border-sidebar-border py-4 items-center gap-2 transition-all duration-300", className)}>
-            <Image src="/logo.png" width={20} height={20} alt="logo" className="rounded-full w-8 h-8 mb-5 mt-0.5" />
+            <Link href="/">
+                <Image src="/logo.png" width={20} height={20} alt="logo" className="rounded-full w-8 h-8 mb-5 mt-0.5" />
+            </Link>
             {items.map((item) => {
                 const isActive = item.link === "/"
                     ? pathname === "/"

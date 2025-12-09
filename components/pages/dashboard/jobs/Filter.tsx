@@ -68,9 +68,8 @@ export default function Filter() {
             <div className="lg:hidden">
                 <Drawer>
                     <DrawerTrigger asChild>
-                        <Button variant="outline" size="sm" className="gap-2">
+                        <Button variant="outline" size="icon" className="gap-2">
                             <FilterIcon className="h-4 w-4" />
-                            Filters
                         </Button>
                     </DrawerTrigger>
                     <DrawerContent>

@@ -28,6 +28,7 @@ export interface Job {
     listing_type: ListingType;
     created_at: string;
     updated_at: string;
+    job_mode: string;
 }
 
 export interface ExternalJob extends Job {

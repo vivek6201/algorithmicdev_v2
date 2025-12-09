@@ -44,7 +44,7 @@ export default function HeroSection() {
             {/* 4. Middle Left Cyan Glow (Fills left side void) */}
             <div className="absolute top-1/2 left-0 -translate-x-1/3 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 dark:bg-cyan-500/5 rounded-full blur-[100px] -z-10 pointer-events-none" />
 
-            <div className="relative z-10 container px-10 mx-auto flex flex-col xl:flex-row items-center justify-between gap-12 lg:gap-20">
+            <div className="relative z-10 container md:px-10 mx-auto flex flex-col xl:flex-row items-center justify-between gap-12 lg:gap-20">
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
