@@ -3,10 +3,14 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'motion/react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import ThemeToggler from '@/components/common/theme-toggler';
+import { useUserStore } from '@/store/user';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { useAuth } from '@/hooks/auth';
 
 const navItems = [
     { name: 'Home', href: '/' },
@@ -20,6 +24,8 @@ export default function Header() {
     const { scrollY } = useScroll();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { isAuthenticated, user } = useUserStore()
+    const { logout } = useAuth()
 
     // Detect scroll to change background style
     useMotionValueEvent(scrollY, "change", (latest) => {
@@ -83,11 +89,40 @@ export default function Header() {
                     {/* Actions */}
                     <div className="flex items-center gap-2">
                         <ThemeToggler />
-                        <Link href="/login" className="hidden lg:block">
-                            <Button size="sm" className="rounded-full h-9 px-5">
-                                Get Started
-                            </Button>
-                        </Link>
+                        <div className="hidden lg:block">
+                            {
+                                isAuthenticated ? (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Avatar className="h-9 w-9 cursor-pointer">
+                                                <AvatarFallback className='text-sm'>
+                                                    {(user?.name || user?.email || 'U')
+                                                        .split(' ')
+                                                        .map((n) => n[0])
+                                                        .join('')
+                                                        .toUpperCase()
+                                                    }
+                                                </AvatarFallback>
+                                            </Avatar>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align='end'>
+                                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem asChild className='hover:rounded-none'>
+                                                <Link href="/profile">Profile</Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={logout} className='hover:rounded-none'>Log out</DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                ) : (
+                                    <Link href="/login">
+                                        <Button size="sm" className="rounded-full h-9 px-5">
+                                            Get Started
+                                        </Button>
+                                    </Link>
+                                )
+                            }
+                        </div>
                         <Button
                             variant="ghost"
                             size="icon"
@@ -114,18 +149,53 @@ export default function Header() {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className="px-4 py-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm font-medium transition-colors"
+                                    className="px-4 py-3 group rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm font-medium transition-colors"
                                     onClick={(e) => {
                                         setMobileMenuOpen(false);
                                         handleScroll(e, item.href);
                                     }}
                                 >
-                                    {item.name}
+                                    <p className="text-xs flex items-center gap-1 justify-between">
+                                        {item.name}
+                                        <ChevronRight className='-translate-x-0.5 group-hover:translate-x-0 transition-all duration-300 opacity-60 group-hover:opacity-100' size={12} />
+                                    </p>
                                 </Link>
                             ))}
-                            <Link href="/login">
-                                <Button className="w-full rounded-xl">Get Started</Button>
-                            </Link>
+                            {
+                                !isAuthenticated ? (<Link href="/login">
+                                    <Button className="w-full rounded-xl">Get Started</Button>
+                                </Link>) : (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <div className="flex justify-between items-center px-4 py-3 group rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm font-medium transition-colors">
+                                                <div className='flex items-center gap-2'>
+                                                    <Avatar className="h-7 w-7 cursor-pointer">
+                                                        <AvatarFallback>
+                                                            {(user?.name || user?.email || 'U')
+                                                                .split(' ')
+                                                                .map((n) => n[0])
+                                                                .join('')
+                                                                .toUpperCase()
+                                                            }
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                    <p className='capitalize text-sm'>{user?.name}</p>
+                                                </div>
+                                                <ChevronRight className='-translate-x-0.5 group-hover:translate-x-0 transition-all duration-300 opacity-60 group-hover:opacity-100' size={12} />
+                                            </div>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-56">
+                                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem asChild>
+                                                <Link href="/profile">Profile</Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                )
+                            }
                         </nav>
                     </motion.div>
                 )}

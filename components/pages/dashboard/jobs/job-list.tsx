@@ -1,32 +1,57 @@
 "use client"
 
 import { fetchExternalJobs } from "@/lib/routes/jobs"
-import { useQuery } from "@tanstack/react-query"
-import JobCard from "./JobCard"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import JobCard from "./job-card"
 import Filter from "./Filter"
 import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
+import { Search, Loader2 } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 
 export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) {
-    const getData = async () => {
-        switch (fetchFor) {
-            case "other":
-                return fetchExternalJobs()
-            case "direct":
-            // return fetchDirectJobs()
-        }
-    }
+    const { ref, inView } = useInView()
 
-    const { data, isLoading, error } = useQuery({
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading,
+        error
+    } = useInfiniteQuery({
         queryKey: [`${fetchFor}-jobs`],
-        queryFn: getData
+        queryFn: async ({ pageParam = 1 }) => {
+            if (fetchFor === "other") {
+                return fetchExternalJobs({ page: pageParam, limit: 10 })
+            }
+            // return fetchDirectJobs()
+            return { data: [], total_items: 0, total_pages: 0, page: 1, limit: 10 }
+        },
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage) return undefined
+            return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined
+        }
     })
+
+    useEffect(() => {
+        if (inView && hasNextPage) {
+            fetchNextPage()
+        }
+    }, [inView, hasNextPage, fetchNextPage])
 
     if (isLoading) {
         return <JobSkeleton />
     }
+
+    if (!data) {
+        return null
+    }
+
+    const { pages } = data
+    const jobs = pages.flatMap(page => page?.data ?? [])
 
     return (
         <div className="flex flex-col gap-6 w-full mx-auto">
@@ -59,16 +84,26 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
                         </div>
                     )}
 
-                    {data && data.length === 0 && (
+                    {!isLoading && jobs.length === 0 && (
                         <div className="p-12 text-center text-muted-foreground bg-muted/20 rounded-lg border border-border border-dashed h-64 flex items-center justify-center flex-col gap-2">
                             <p className="font-medium text-lg">No jobs found</p>
                             <p className="text-sm">Try adjusting your filters or check back later.</p>
                         </div>
                     )}
 
-                    {data?.map((job) => (
+                    {jobs.map((job) => (
                         <JobCard key={job.id} job={job} />
                     ))}
+
+                    {/* Loading spinner for next page */}
+                    {isFetchingNextPage && (
+                        <div className="p-4 flex justify-center w-full">
+                            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                        </div>
+                    )}
+
+                    {/* Intersection observer target */}
+                    <div ref={ref} className="h-4 w-full" />
                 </div>
 
                 {/* Right Sidebar - Desktop Filter */}
@@ -78,6 +113,33 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
             </div>
         </div>
     )
+}
+
+function useInView({ threshold = 0 } = {}) {
+    const [inView, setInView] = useState(false)
+    const ref = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setInView(entry.isIntersecting)
+            },
+            { threshold }
+        )
+
+        const currentRef = ref.current
+        if (currentRef) {
+            observer.observe(currentRef)
+        }
+
+        return () => {
+            if (currentRef) {
+                observer.unobserve(currentRef)
+            }
+        }
+    }, [threshold])
+
+    return { ref, inView }
 }
 
 const JobSkeleton = () => {

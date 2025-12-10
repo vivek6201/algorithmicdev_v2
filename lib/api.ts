@@ -47,7 +47,7 @@ export const apiClient = async <T>({
                     // Attempt to refresh token
                     // We use a fresh axios call to avoid circular dependency or interceptor loops
                     await axios.post(
-                        `${BASE_URL}/auth/admin/refresh`,
+                        `${BASE_URL}/api/auth/refresh`,
                         {},
                         {
                             withCredentials: !isServer,

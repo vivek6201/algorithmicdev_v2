@@ -1,7 +1,5 @@
-function Signup() {
-    return (
-        <div>Signup</div>
-    )
-}
+import { AuthCard } from "@/components/pages/essential/auth/auth-card"
 
-export default Signup
+export default function SignupPage() {
+    return <AuthCard />
+}

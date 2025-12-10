@@ -1,4 +1,4 @@
-import JobList from "@/components/pages/dashboard/jobs/JobList";
+import JobList from "@/components/pages/dashboard/jobs/job-list";
 
 export default function page() {
     return (

@@ -1,9 +1,8 @@
 import { fetchJobDetail } from "@/lib/routes/jobs";
-import JobDescription from "@/components/pages/jobs/job-description";
+import JobDescription from "@/components/pages/dashboard/jobs/job-description";
 import { Metadata } from "next";
-import { Badge } from "@/components/ui/badge";
-import { formatCurrency, formatDate } from "@/lib/utils";
-import JobHeaderActions from "@/components/pages/jobs/job-header-actions";
+import { formatDate } from "@/lib/utils";
+import JobHeaderActions from "@/components/pages/dashboard/jobs/job-header-actions";
 
 async function getData(slug: string) {
     const response = await fetchJobDetail(slug)

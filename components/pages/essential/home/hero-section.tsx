@@ -68,7 +68,7 @@ export default function HeroSection() {
                             Launch your <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-pink-500">Career</span>
                         </h1>
 
-                        <div className="text-lg sm:text-xl text-muted-foreground flex flex-wrap items-center justify-center lg:justify-start gap-2 h-8">
+                        <div className="text-lg sm:text-xl text-muted-foreground flex flex-wrap items-center justify-center xl:justify-start gap-2 h-8">
                             <span>Become Job-Ready by</span>
                             <ContainerTextFlip
                                 words={words}

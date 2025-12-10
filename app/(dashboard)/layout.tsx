@@ -1,6 +1,6 @@
 import Header from "@/components/pages/dashboard/header";
 import Sidebar from "@/components/pages/dashboard/sidebar";
-import MobileNav from "@/components/pages/dashboard/MobileNav";
+import MobileNav from "@/components/pages/dashboard/mobile-nav";
 import { sidebarItems } from "@/lib/constants";
 import Footer from "@/components/pages/essential/footer";
 

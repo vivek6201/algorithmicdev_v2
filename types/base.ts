@@ -1,5 +1,3 @@
-import { ExternalJob } from "./job";
-
 export interface BaseResponse<T> {
     success: boolean;
     message: string;
@@ -7,10 +5,25 @@ export interface BaseResponse<T> {
     error?: any;
 }
 
-export interface ExternalJobListResponse extends BaseResponse<ExternalJob[]> {
-    data: ExternalJob[]
+export interface PaginatedData<T> {
+    data: T[];
+    total_items: number;
+    total_pages: number;
+    page: number;
+    limit: number;
 }
 
-export interface ExternalJobResponse extends BaseResponse<ExternalJob> {
-    data: ExternalJob
+export interface ListResponse<T> extends BaseResponse<PaginatedData<T>> { }
+
+export interface User {
+    id: string
+    email: string
+    role: string
+}
+
+export interface UserProfile extends User {
+    username: string
+    name: string
+    created_at: string
+    updated_at: string
 }
