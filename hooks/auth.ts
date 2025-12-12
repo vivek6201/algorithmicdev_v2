@@ -3,7 +3,6 @@
 import { getUser } from "@/actions/user"
 import { logoutUser } from "@/lib/routes/auth"
 import { useUserStore } from "@/store/user"
-import { useEffect } from "react"
 
 export const useAuth = () => {
     const { setUser, clearUser, setLoading } = useUserStore()

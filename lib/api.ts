@@ -1,4 +1,5 @@
 import axios, { AxiosResponse, type Method } from "axios"
+import { parse } from "set-cookie-parser"
 
 interface ApiClientOptions {
     endpoint: string
@@ -46,7 +47,7 @@ export const apiClient = async <T>({
                 try {
                     // Attempt to refresh token
                     // We use a fresh axios call to avoid circular dependency or interceptor loops
-                    await axios.post(
+                    const res = await axios.post(
                         `${BASE_URL}/api/auth/refresh`,
                         {},
                         {
@@ -54,6 +55,22 @@ export const apiClient = async <T>({
                             headers: isServer ? { Cookie: headers["Cookie"] } : undefined,
                         }
                     )
+
+                    if (isServer) {
+                        const { cookies } = await import("next/headers")
+                        const cookieStore = await cookies()
+                        const cookiesData = parse(res.headers["set-cookie"] as string[])
+
+                        //@ts-ignore
+                        cookiesData.forEach(cookie => cookieStore.set(cookie.name, cookie.value, { ...cookie }))
+
+                        // Update authorization header for the retry
+                        if (originalRequest.headers) {
+                            const newCookieHeader = cookiesData.map(c => `${c.name}=${c.value}`).join("; ")
+                            originalRequest.headers["Cookie"] = newCookieHeader
+                        }
+                        headers["Cookie"] = cookieStore.toString()
+                    }
 
                     // Retry original request
                     return client(originalRequest)

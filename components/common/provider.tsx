@@ -16,8 +16,12 @@ function Provider({ children }: { children: ReactNode }) {
     useEffect(() => {
         if (isMounted) return;
         setIsMounted(true)
-        fetchUser()
     }, [])
+
+    useEffect(() => {
+        if (!isMounted) return;
+        fetchUser()
+    }, [isMounted])
 
     if (!isMounted) return null;
 

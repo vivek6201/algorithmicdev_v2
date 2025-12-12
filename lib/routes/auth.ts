@@ -62,6 +62,20 @@ export const logoutUser = async () => {
     }
 }
 
+export const verifyEmail = async (token: string) => {
+    try {
+        const { data } = await apiClient<BaseResponse<null>>({
+            endpoint: `/api/auth/verify-email/${token}`,
+            method: "GET",
+        })
+
+        return data
+    } catch (e) {
+        const error = e as AxiosError
+        return error.response?.data as BaseResponse<null>
+    }
+}
+
 export const fetchCurrentUser = async () => {
     try {
         const { data } = await apiClient<BaseResponse<UserProfile>>({
