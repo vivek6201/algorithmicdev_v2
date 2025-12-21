@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [{
+      hostname: "d1s05seu32cxps.cloudfront.net"
+    }]
+  }
 };
 
 export default nextConfig;

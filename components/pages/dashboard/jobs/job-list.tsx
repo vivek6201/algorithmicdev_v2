@@ -165,46 +165,64 @@ const JobSkeleton = () => {
                 {/* Main Content - Job List */}
                 <div className="lg:col-span-3 space-y-4 order-2 lg:order-1">
                     {[1, 2].map((i) => (
-                        <Card key={i} className="group relative overflow-hidden border-border bg-card">
-                            <CardHeader className="p-5 pb-2">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex gap-4 w-full">
-                                        <Skeleton className="h-12 w-12 rounded-lg shrink-0" />
-                                        <div className="space-y-2 w-full max-w-sm">
-                                            <Skeleton className="h-5 w-3/4" />
-                                            <div className="flex items-center gap-2">
-                                                <Skeleton className="h-3 w-4" />
-                                                <Skeleton className="h-3 w-32" />
-                                            </div>
+                        <Card key={i} className="group relative overflow-hidden border-border bg-card py-1 md:py-4">
+                            {/* Mobile Skeleton */}
+                            <div className="md:hidden p-4 space-y-4">
+                                {/* Title + Company + Apply Button */}
+                                <div className="flex items-center justify-between">
+                                    <div className="space-y-2 flex-1">
+                                        <Skeleton className="h-5 w-3/4" />
+                                        <div className="flex items-center gap-2">
+                                            <Skeleton className="h-3 w-3" />
+                                            <Skeleton className="h-3 w-32" />
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <Skeleton className="h-6 w-16 rounded-full" />
-                                        <Skeleton className="h-8 w-8 rounded-md" />
-                                    </div>
+                                    <Skeleton className="h-8 w-16 rounded-md" />
                                 </div>
-                            </CardHeader>
-                            <CardContent className="p-5 pt-2 pb-4 space-y-4">
-                                <div className="flex gap-2">
-                                    <Skeleton className="h-5 w-16 rounded-full" />
+
+                                {/* Pills Row */}
+                                <div className="flex flex-wrap gap-2">
+                                    <Skeleton className="h-5 w-28 rounded-full" />
                                     <Skeleton className="h-5 w-20 rounded-full" />
                                 </div>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-y border-border/50">
+
+                                {/* Posted date */}
+                                <Skeleton className="h-3 w-32" />
+                            </div>
+
+                            {/* Desktop Skeleton */}
+                            <div className="hidden md:block">
+                                <CardHeader>
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex gap-4 items-center">
+                                            {/* Company Icon */}
+                                            <Skeleton className="h-12 w-12 rounded-lg shrink-0" />
+                                            <div className="space-y-2">
+                                                <Skeleton className="h-5 w-48" />
+                                                <div className="flex items-center gap-2">
+                                                    <Skeleton className="h-3.5 w-3.5" />
+                                                    <Skeleton className="h-4 w-24" />
+                                                    <Skeleton className="h-3 w-2" />
+                                                    <Skeleton className="h-3 w-20" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <Skeleton className="h-9 w-28 rounded-md" />
+                                    </div>
+                                </CardHeader>
+
+                                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-border/50">
                                     {[1, 2, 3, 4].map((j) => (
                                         <div key={j} className="space-y-1">
-                                            <Skeleton className="h-3 w-12" />
-                                            <Skeleton className="h-4 w-20" />
+                                            <div className="flex items-center gap-1.5">
+                                                <Skeleton className="h-3.5 w-3.5" />
+                                                <Skeleton className="h-3 w-12" />
+                                            </div>
+                                            <Skeleton className="h-4 w-24" />
                                         </div>
                                     ))}
-                                </div>
-                            </CardContent>
-                            <CardFooter className="p-5 pt-0 flex items-center justify-between">
-                                <Skeleton className="h-3 w-40" />
-                                <div className="flex gap-3">
-                                    <Skeleton className="h-9 w-24 rounded-md" />
-                                    <Skeleton className="h-9 w-24 rounded-md" />
-                                </div>
-                            </CardFooter>
+                                </CardContent>
+                            </div>
                         </Card>
                     ))}
                 </div>
