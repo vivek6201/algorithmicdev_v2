@@ -30,6 +30,7 @@ export default function JobCard({ job }: JobCardProps) {
                             <Link
                                 href={`/jobs/other/${job.slug}`}
                                 className="hover:text-primary"
+                                target="_blank"
                             >
                                 {job.title}
                             </Link>
@@ -81,7 +82,7 @@ export default function JobCard({ job }: JobCardProps) {
 
                             <div>
                                 <h3 className="font-bold text-lg hover:text-primary transition-colors">
-                                    <Link href={`/jobs/other/${job.slug}`}>
+                                    <Link href={`/jobs/other/${job.slug}`} target="_blank">
                                         {job.title}
                                     </Link>
                                 </h3>
