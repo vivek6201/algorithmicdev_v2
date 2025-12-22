@@ -19,5 +19,5 @@ export interface Blog {
 export interface BlogMetadata {
     likes: number
     dislikes: number
-    user_action: 'like' | 'dislike' | 'bookmark' | null
+    current_reaction: 'LIKE' | 'DISLIKE' | null
 }

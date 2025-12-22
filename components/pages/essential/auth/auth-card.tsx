@@ -20,7 +20,6 @@ export function AuthCard() {
     const paramsString = searchParams.toString()
     const queryString = paramsString ? `?${paramsString}` : ""
 
-
     return (
         <Card className="w-full max-w-md mx-auto">
             <CardHeader>

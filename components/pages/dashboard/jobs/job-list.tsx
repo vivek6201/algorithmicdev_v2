@@ -1,7 +1,7 @@
 "use client"
 
 import { fetchExternalJobs } from "@/lib/routes/jobs"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query"
 import JobCard from "./job-card"
 import Filter from "./Filter"
 import { Input } from "@/components/ui/input"
@@ -9,9 +9,12 @@ import { Search, Loader2 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { useDebounce } from "@/hooks/use-debounce"
 
 export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) {
     const { ref, inView } = useInView()
+    const [searchQuery, setSearchQuery] = useState("")
+    const debouncedSearch = useDebounce(searchQuery, 300)
 
     const {
         data,
@@ -19,12 +22,13 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
         hasNextPage,
         isFetchingNextPage,
         isLoading,
+        isFetching,
         error
     } = useInfiniteQuery({
-        queryKey: [`${fetchFor}-jobs`],
+        queryKey: [`${fetchFor}-jobs`, debouncedSearch],
         queryFn: async ({ pageParam = 1 }) => {
             if (fetchFor === "other") {
-                return fetchExternalJobs({ page: pageParam, limit: 10 })
+                return fetchExternalJobs({ page: pageParam, limit: 10, search: debouncedSearch })
             }
             // return fetchDirectJobs()
             return { data: [], total_items: 0, total_pages: 0, page: 1, limit: 10 }
@@ -33,7 +37,8 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
         getNextPageParam: (lastPage) => {
             if (!lastPage) return undefined
             return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined
-        }
+        },
+        placeholderData: keepPreviousData
     })
 
     useEffect(() => {
@@ -42,7 +47,8 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
         }
     }, [inView, hasNextPage, fetchNextPage])
 
-    if (isLoading) {
+    // Only show skeleton on initial load, not when searching
+    if (isLoading && !data) {
         return <JobSkeleton />
     }
 
@@ -66,8 +72,13 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Search jobs..."
-                            className="w-full bg-background pl-9 focus:bg-background transition-all"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-background pl-9 pr-9 focus:bg-background transition-all"
                         />
+                        {isFetching && searchQuery && (
+                            <Loader2 className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground animate-spin" />
+                        )}
                     </div>
                     {/* Mobile Filter Trigger Position */}
                     <div className="lg:hidden">

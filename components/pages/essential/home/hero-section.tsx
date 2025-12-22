@@ -10,10 +10,10 @@ import { useRouter } from 'nextjs-toploader/app';
 import ContainerTextFlip from '@/components/ui/text-flip';
 
 const categories = [
-    { name: 'Tutorials', icon: <Code2 className="w-4 h-4" />, href: '/tutorials' },
+    // { name: 'Tutorials', icon: <Code2 className="w-4 h-4" />, href: '/tutorials' },
     { name: 'Find Jobs', icon: <Search className="w-4 h-4" />, href: '/jobs' },
     { name: 'Read Blogs', icon: <Terminal className="w-4 h-4" />, href: '/blogs' },
-    { name: 'Hire Talent', icon: <Rocket className="w-4 h-4" />, href: '/jobs/hire' },
+    // { name: 'Hire Talent', icon: <Rocket className="w-4 h-4" />, href: '/jobs/hire' },
 ];
 
 const skills = ['React', 'Python', 'Machine Learning', 'Data Science', 'Node.js', 'Flutter'];

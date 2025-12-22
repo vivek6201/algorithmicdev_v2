@@ -2,10 +2,15 @@ import { BaseResponse, ListResponse } from "@/types/base"
 import { apiClient } from "../api"
 import { Blog, BlogMetadata } from "@/types/blog"
 
-export const fetchBlogs = async ({ page = 1, limit = 10 }: { page?: number; limit?: number } = {}) => {
+export const fetchBlogs = async ({ page = 1, limit = 10, search = "" }: { page?: number; limit?: number; search?: string } = {}) => {
     const { data } = await apiClient<ListResponse<Blog>>({
-        endpoint: `/api/edu/blogs?page=${page}&limit=${limit}`,
-        method: "GET"
+        endpoint: `/api/edu/blogs`,
+        method: "GET",
+        params: {
+            page,
+            limit,
+            ...(search && { search })
+        }
     })
     return data.data
 }

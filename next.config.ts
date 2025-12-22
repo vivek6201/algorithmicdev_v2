@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [{
       hostname: "d1s05seu32cxps.cloudfront.net"
     }]
-  }
+  },
 };
 
 export default nextConfig;

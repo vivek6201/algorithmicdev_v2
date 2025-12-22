@@ -10,8 +10,9 @@ export const useAuth = () => {
     async function fetchUser() {
         setLoading(true)
         try {
+
             const data = await getUser()
-            if (data.success && data.data) {
+            if (data && data.success && data.data) {
                 setUser(data.data)
             } else {
                 clearUser()

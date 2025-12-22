@@ -1,16 +1,18 @@
 "use client"
 
 import { fetchBlogs } from "@/lib/routes/blogs"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query"
 import BlogCard from "./blog-card"
 import { Input } from "@/components/ui/input"
 import { Search, Loader2 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { useDebounce } from "@/hooks/use-debounce"
 
 export default function BlogList() {
     const { ref, inView } = useInView()
+    const [searchQuery, setSearchQuery] = useState("")
+    const debouncedSearch = useDebounce(searchQuery, 300)
 
     const {
         data,
@@ -18,17 +20,19 @@ export default function BlogList() {
         hasNextPage,
         isFetchingNextPage,
         isLoading,
+        isFetching,
         error
     } = useInfiniteQuery({
-        queryKey: ["blogs"],
+        queryKey: ["blogs", debouncedSearch],
         queryFn: async ({ pageParam = 1 }) => {
-            return fetchBlogs({ page: pageParam, limit: 10 })
+            return fetchBlogs({ page: pageParam, limit: 10, search: debouncedSearch })
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
             if (!lastPage) return undefined
             return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined
-        }
+        },
+        placeholderData: keepPreviousData
     })
 
     useEffect(() => {
@@ -37,7 +41,8 @@ export default function BlogList() {
         }
     }, [inView, hasNextPage, fetchNextPage])
 
-    if (isLoading) {
+    // Only show skeleton on initial load, not when searching
+    if (isLoading && !data) {
         return <BlogSkeleton />
     }
 
@@ -61,8 +66,13 @@ export default function BlogList() {
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Search blogs..."
-                            className="w-full bg-background pl-9 focus:bg-background transition-all"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-background pl-9 pr-9 focus:bg-background transition-all"
                         />
+                        {isFetching && searchQuery && (
+                            <Loader2 className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground animate-spin" />
+                        )}
                     </div>
                 </div>
             </div>
