@@ -4,7 +4,7 @@ import { Blog, BlogMetadata } from "@/types/blog"
 
 export const fetchBlogs = async ({ page = 1, limit = 10, search = "" }: { page?: number; limit?: number; search?: string } = {}) => {
     const { data } = await apiClient<ListResponse<Blog>>({
-        endpoint: `/api/edu/blogs`,
+        endpoint: `/api/edu/blogs/`,
         method: "GET",
         params: {
             page,
