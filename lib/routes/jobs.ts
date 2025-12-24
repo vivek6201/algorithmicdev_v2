@@ -1,5 +1,5 @@
 import { ExternalJob, ListingType } from "@/types/job"
-import { apiClient } from "../api"
+import { apiClient } from "../utils/api"
 import { BaseResponse, ListResponse } from "@/types/base"
 
 export const fetchExternalJobs = async ({ page = 1, limit = 10, search = "" }: { page?: number, limit?: number, search?: string } = {}) => {

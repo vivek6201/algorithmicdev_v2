@@ -117,7 +117,7 @@ export default function JobCard({ job }: JobCardProps) {
 
                     <div>
                         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                            <Clock className="h-3.5 w-3.5" /> Duration
+                            <Clock className="h-3.5 w-3.5" /> Job Type
                         </div>
                         <p className="font-semibold text-sm">{job.job_type.replace("_", " ")}</p>
                     </div>

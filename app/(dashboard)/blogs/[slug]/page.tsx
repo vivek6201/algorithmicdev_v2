@@ -1,8 +1,10 @@
 import { fetchBlogBySlug } from "@/lib/routes/blogs";
 import { Metadata } from "next";
 import { formatDate } from "@/lib/utils";
-import ContentRenderer from "@/components/pages/dashboard/content-renderer";
-import BlogActions from "@/components/pages/dashboard/blogs/blog-actions";
+import { lazyLoadClient } from "@/lib/lazy";
+
+const BlogActions = lazyLoadClient<{ blogSlug: string }>(() => import("@/components/pages/dashboard/blogs/blog-actions").then(mod => ({ default: mod.default })))
+const ContentRenderer = lazyLoadClient<{ content: string }>(() => import("@/components/pages/dashboard/content-renderer").then(mod => ({ default: mod.default })))
 
 async function getData(slug: string) {
     const response = await fetchBlogBySlug(slug)

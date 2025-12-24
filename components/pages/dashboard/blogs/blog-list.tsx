@@ -2,12 +2,17 @@
 
 import { fetchBlogs } from "@/lib/routes/blogs"
 import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query"
-import BlogCard from "./blog-card"
+
 import { Input } from "@/components/ui/input"
 import { Search, Loader2 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useDebounce } from "@/hooks/use-debounce"
+import { lazyLoadClient } from "@/lib/lazy"
+import { Blog } from "@/types/blog"
+import useInView from "@/hooks/use-in-view"
+
+const BlogCard = lazyLoadClient<{ blog: Blog }>(() => import("./blog-card").then(mod => ({ default: mod.default })))
 
 export default function BlogList() {
     const { ref, inView } = useInView()
@@ -44,6 +49,21 @@ export default function BlogList() {
     // Only show skeleton on initial load, not when searching
     if (isLoading && !data) {
         return <BlogSkeleton />
+    }
+
+    // Show error state when API fails
+    if (error && !data) {
+        return (
+            <div className="flex flex-col gap-6 w-full mx-auto">
+                <div className="flex flex-col mb-5 md:mb-0">
+                    <h1 className="text-xl lg:text-2xl font-bold tracking-tight">Explore Blogs</h1>
+                    <p className="text-sm md:text-base text-muted-foreground">Discover insights and tutorials from our curated collection.</p>
+                </div>
+                <div className="p-8 text-center text-red-500 bg-red-500/10 rounded-lg border border-red-500/20">
+                    Failed to load blogs. Please try again later.
+                </div>
+            </div>
+        )
     }
 
     if (!data) {
@@ -107,33 +127,6 @@ export default function BlogList() {
             </div>
         </div>
     )
-}
-
-function useInView({ threshold = 0 } = {}) {
-    const [inView, setInView] = useState(false)
-    const ref = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setInView(entry.isIntersecting)
-            },
-            { threshold }
-        )
-
-        const currentRef = ref.current
-        if (currentRef) {
-            observer.observe(currentRef)
-        }
-
-        return () => {
-            if (currentRef) {
-                observer.unobserve(currentRef)
-            }
-        }
-    }, [threshold])
-
-    return { ref, inView }
 }
 
 const BlogSkeleton = () => {

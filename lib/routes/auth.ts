@@ -1,5 +1,5 @@
 import { LoginFormValues, SignupInput } from "@/validations/auth";
-import { apiClient } from "../api";
+import { apiClient } from "../utils/api";
 import { BaseResponse, UserProfile, User } from "@/types/base";
 import { AxiosError } from "axios";
 
