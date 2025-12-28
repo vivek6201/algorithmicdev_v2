@@ -104,7 +104,7 @@ export default function JobCard({ job }: JobCardProps) {
                     </div>
                 </CardHeader>
 
-                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-border/50 place-items-stretch">
+                <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-2 py-4 border-t border-border/50 place-items-stretch">
                     <div>
                         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                             <Banknote className="h-3.5 w-3.5" /> Salary
@@ -127,6 +127,16 @@ export default function JobCard({ job }: JobCardProps) {
                             <Briefcase className="h-3.5 w-3.5" /> Mode
                         </div>
                         <p className="font-semibold text-sm">{job.job_mode.replace("_", " ")}</p>
+                    </div>
+
+                    <div>
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <Briefcase className="h-3.5 w-3.5" /> Experience
+                        </div>
+                        <p className="font-semibold text-sm">
+                            {job.min_experience} -{" "}
+                            {job.max_experience} yrs
+                        </p>
                     </div>
 
                     <div>

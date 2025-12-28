@@ -86,7 +86,7 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
                     <p className="text-sm md:text-base text-muted-foreground">Find your next opportunity from our curated list of positions.</p>
                 </div>
 
-                <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="flex items-center gap-2 w-full md:w-auto">
                     <div className="relative flex-1 md:w-[300px] lg:w-[500px]">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input

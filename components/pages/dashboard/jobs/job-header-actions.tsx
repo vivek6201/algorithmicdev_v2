@@ -12,6 +12,7 @@ interface JobHeaderActionsProps {
 
 export default function JobHeaderActions({ applyUrl }: JobHeaderActionsProps) {
     const [open, setOpen] = useState(false)
+    const pageLink: string = window.location.href;
     return (
         <>
             {/* Desktop View */}
@@ -30,7 +31,7 @@ export default function JobHeaderActions({ applyUrl }: JobHeaderActionsProps) {
                 >
                     <Share2 className="w-4 h-4" />
                 </Button>
-                <ShareDialog link={applyUrl} open={open} onOpenChange={setOpen} title="Share Job" />
+                <ShareDialog link={pageLink} open={open} onOpenChange={setOpen} title="Share Job" />
             </div>
 
             {/* Mobile View - Floating Apply Button */}
@@ -51,7 +52,7 @@ export default function JobHeaderActions({ applyUrl }: JobHeaderActionsProps) {
                         <Share2 className="w-4 h-4" />
                     </Button>
                 </div>
-                <ShareDialog link={applyUrl} open={open} onOpenChange={setOpen} title="Share Job" />
+                <ShareDialog link={pageLink} open={open} onOpenChange={setOpen} title="Share Job" />
             </div>
         </>
     );
