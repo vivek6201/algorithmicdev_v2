@@ -1,28 +1,29 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
-function useInView({ threshold = 0 } = {}) {
+function useInView({ threshold = 0, rootMargin = "0px" } = {}) {
     const [inView, setInView] = useState(false)
-    const ref = useRef<HTMLDivElement>(null)
+    const [node, setNode] = useState<HTMLElement | null>(null)
+
+    const ref = useCallback((element: HTMLElement | null) => {
+        setNode(element)
+    }, [])
 
     useEffect(() => {
+        if (!node) return
+
         const observer = new IntersectionObserver(
             ([entry]) => {
                 setInView(entry.isIntersecting)
             },
-            { threshold }
+            { threshold, rootMargin }
         )
 
-        const currentRef = ref.current
-        if (currentRef) {
-            observer.observe(currentRef)
-        }
+        observer.observe(node)
 
         return () => {
-            if (currentRef) {
-                observer.unobserve(currentRef)
-            }
+            observer.disconnect()
         }
-    }, [threshold])
+    }, [node, threshold, rootMargin])
 
     return { ref, inView }
 }
