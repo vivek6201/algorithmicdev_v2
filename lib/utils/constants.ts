@@ -1,5 +1,5 @@
 "use client"
-import { BookOpen, Briefcase, File, Home, LucideIcon, MessageCircle } from "lucide-react";
+import { Book, BookOpen, Briefcase, File, Home, LucideIcon, MessageCircle } from "lucide-react";
 
 interface SidebarItem {
     name: string
@@ -23,6 +23,11 @@ export const sidebarItems: SidebarItem[] = [
         name: "Blogs",
         link: "/blogs",
         icon: BookOpen
+    },
+    {
+        name: "Tutorials",
+        link: "/tutorials",
+        icon: Book
     }
 ]
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { Blog } from "@/types/blog"
+import { Blog } from "@/types/education/blog"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowUpRight } from "lucide-react"
 import Image from "next/image"

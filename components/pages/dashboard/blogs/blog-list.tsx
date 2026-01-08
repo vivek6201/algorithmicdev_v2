@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useDebounce } from "@/hooks/use-debounce"
 import { lazyLoadClient } from "@/lib/lazy"
-import { Blog } from "@/types/blog"
+import { Blog } from "@/types/education/blog"
 import useInView from "@/hooks/use-in-view"
 
 const BlogCard = lazyLoadClient<{ blog: Blog }>(() => import("./blog-card").then(mod => ({ default: mod.default })))

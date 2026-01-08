@@ -1,6 +1,6 @@
 import { BaseResponse, ListResponse } from "@/types/base"
 import { apiClient } from "../utils/api"
-import { Blog, BlogMetadata } from "@/types/blog"
+import { Blog, BlogMetadata } from "@/types/education/blog"
 
 export const fetchBlogs = async ({ page = 1, limit = 10, search = "" }: { page?: number; limit?: number; search?: string } = {}) => {
     const { data } = await apiClient<ListResponse<Blog>>({

@@ -15,7 +15,7 @@ import { useAuth } from '@/hooks/auth';
 const navItems = [
     { name: 'Home', href: '/' },
     { name: 'Features', href: '#features' },
-    { name: 'FAQ', href: '#faq' },
+    { name: 'Tutorials', href: '/tutorials' },
     { name: 'Blogs', href: '/blogs' },
     { name: 'Jobs', href: '/jobs' }
 ];
