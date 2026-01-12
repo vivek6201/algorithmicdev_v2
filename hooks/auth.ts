@@ -24,12 +24,5 @@ export const useAuth = () => {
         }
     }
 
-    const logout = async () => {
-        const data = await logoutUser()
-        if (data.success) {
-            clearUser()
-        }
-    }
-
-    return { fetchUser, logout };
+    return { fetchUser };
 } 

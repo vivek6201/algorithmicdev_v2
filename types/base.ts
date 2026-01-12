@@ -14,16 +14,3 @@ export interface PaginatedData<T> {
 }
 
 export interface ListResponse<T> extends BaseResponse<PaginatedData<T>> { }
-
-export interface User {
-    id: string
-    email: string
-    role: string
-}
-
-export interface UserProfile extends User {
-    username: string
-    name: string
-    created_at: string
-    updated_at: string
-}
