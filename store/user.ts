@@ -1,5 +1,5 @@
+import { UserProfile } from '@/types/user'
 import { create } from 'zustand'
-import { UserProfile } from '@/types/base'
 
 interface UserState {
     user: UserProfile | null
