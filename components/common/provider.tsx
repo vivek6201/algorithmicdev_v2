@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { ThemeProvider } from "./theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
@@ -11,20 +11,16 @@ import { SessionProvider } from "next-auth/react";
 const queryClient = new QueryClient();
 
 function Provider({ children }: { children: ReactNode }) {
-  const isMounted = useRef(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { fetchUser } = useAuth();
 
   useEffect(() => {
-    if (isMounted.current) return;
-    isMounted.current = true;
+    if (isMounted) return;
+    fetchUser();
+    setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!isMounted.current) return;
-    fetchUser();
-  }, [isMounted.current]);
-
-  if (!isMounted.current) return null;
+  if (!isMounted) return null;
 
   return (
     <SessionProvider>

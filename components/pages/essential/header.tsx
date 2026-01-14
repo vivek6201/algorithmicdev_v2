@@ -40,8 +40,7 @@ export default function Header() {
   const { data: session } = useSession();
 
   const { user } = useUserStore();
-
-  console.log({ user });
+  const { logout } = useAuth();
 
   // Detect scroll to change background style
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -127,7 +126,7 @@ export default function Header() {
                       <Link href="/profile">Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => signOut()}
+                      onClick={logout}
                       className="hover:rounded-none"
                     >
                       Log out
