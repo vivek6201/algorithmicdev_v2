@@ -1,17 +1,24 @@
 "use client"
 
 import { fetchExternalJobs } from "@/lib/routes/jobs"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import JobCard from "./job-card"
-import Filter from "./Filter"
+import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query"
 import { Input } from "@/components/ui/input"
 import { Search, Loader2 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { useDebounce } from "@/hooks/use-debounce"
+import { lazyLoad } from "@/lib/lazy"
+import { Job } from "@/types/job"
+import useInView from "@/hooks/use-in-view"
+
+const JobCard = lazyLoad<{ job: Job }>(() => import("./job-card"))
+const Filter = lazyLoad(() => import("./Filter"))
 
 export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) {
     const { ref, inView } = useInView()
+    const [searchQuery, setSearchQuery] = useState("")
+    const debouncedSearch = useDebounce(searchQuery, 300)
 
     const {
         data,
@@ -19,12 +26,13 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
         hasNextPage,
         isFetchingNextPage,
         isLoading,
+        isFetching,
         error
     } = useInfiniteQuery({
-        queryKey: [`${fetchFor}-jobs`],
+        queryKey: [`${fetchFor}-jobs`, debouncedSearch],
         queryFn: async ({ pageParam = 1 }) => {
             if (fetchFor === "other") {
-                return fetchExternalJobs({ page: pageParam, limit: 10 })
+                return fetchExternalJobs({ page: pageParam, limit: 10, search: debouncedSearch })
             }
             // return fetchDirectJobs()
             return { data: [], total_items: 0, total_pages: 0, page: 1, limit: 10 }
@@ -33,7 +41,8 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
         getNextPageParam: (lastPage) => {
             if (!lastPage) return undefined
             return lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined
-        }
+        },
+        placeholderData: keepPreviousData
     })
 
     useEffect(() => {
@@ -42,8 +51,24 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
         }
     }, [inView, hasNextPage, fetchNextPage])
 
-    if (isLoading) {
+    // Only show skeleton on initial load, not when searching
+    if (isLoading && !data) {
         return <JobSkeleton />
+    }
+
+    // Show error state when API fails
+    if (error && !data) {
+        return (
+            <div className="flex flex-col gap-6 w-full mx-auto">
+                <div className="flex flex-col mb-5 md:mb-0">
+                    <h1 className="text-xl lg:text-2xl font-bold tracking-tight">Explore Jobs</h1>
+                    <p className="text-sm md:text-base text-muted-foreground">Find your next opportunity from our curated list of positions.</p>
+                </div>
+                <div className="p-8 text-center text-red-500 bg-red-500/10 rounded-lg border border-red-500/20">
+                    Failed to load jobs. Please try again later.
+                </div>
+            </div>
+        )
     }
 
     if (!data) {
@@ -61,13 +86,18 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
                     <p className="text-sm md:text-base text-muted-foreground">Find your next opportunity from our curated list of positions.</p>
                 </div>
 
-                <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="flex items-center gap-2 w-full md:w-auto">
                     <div className="relative flex-1 md:w-[300px] lg:w-[500px]">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Search jobs..."
-                            className="w-full bg-background pl-9 focus:bg-background transition-all"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-background pl-9 pr-9 focus:bg-background transition-all"
                         />
+                        {isFetching && searchQuery && (
+                            <Loader2 className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground animate-spin" />
+                        )}
                     </div>
                     {/* Mobile Filter Trigger Position */}
                     <div className="lg:hidden">
@@ -115,33 +145,6 @@ export default function JobList({ fetchFor }: { fetchFor: "other" | "direct" }) 
     )
 }
 
-function useInView({ threshold = 0 } = {}) {
-    const [inView, setInView] = useState(false)
-    const ref = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setInView(entry.isIntersecting)
-            },
-            { threshold }
-        )
-
-        const currentRef = ref.current
-        if (currentRef) {
-            observer.observe(currentRef)
-        }
-
-        return () => {
-            if (currentRef) {
-                observer.unobserve(currentRef)
-            }
-        }
-    }, [threshold])
-
-    return { ref, inView }
-}
-
 const JobSkeleton = () => {
     return (
         <div className="flex flex-col gap-6 w-full mx-auto">
@@ -165,46 +168,64 @@ const JobSkeleton = () => {
                 {/* Main Content - Job List */}
                 <div className="lg:col-span-3 space-y-4 order-2 lg:order-1">
                     {[1, 2].map((i) => (
-                        <Card key={i} className="group relative overflow-hidden border-border bg-card">
-                            <CardHeader className="p-5 pb-2">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex gap-4 w-full">
-                                        <Skeleton className="h-12 w-12 rounded-lg shrink-0" />
-                                        <div className="space-y-2 w-full max-w-sm">
-                                            <Skeleton className="h-5 w-3/4" />
-                                            <div className="flex items-center gap-2">
-                                                <Skeleton className="h-3 w-4" />
-                                                <Skeleton className="h-3 w-32" />
-                                            </div>
+                        <Card key={i} className="group relative overflow-hidden border-border bg-card py-1 md:py-4">
+                            {/* Mobile Skeleton */}
+                            <div className="md:hidden p-4 space-y-4">
+                                {/* Title + Company + Apply Button */}
+                                <div className="flex items-center justify-between">
+                                    <div className="space-y-2 flex-1">
+                                        <Skeleton className="h-5 w-3/4" />
+                                        <div className="flex items-center gap-2">
+                                            <Skeleton className="h-3 w-3" />
+                                            <Skeleton className="h-3 w-32" />
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <Skeleton className="h-6 w-16 rounded-full" />
-                                        <Skeleton className="h-8 w-8 rounded-md" />
-                                    </div>
+                                    <Skeleton className="h-8 w-16 rounded-md" />
                                 </div>
-                            </CardHeader>
-                            <CardContent className="p-5 pt-2 pb-4 space-y-4">
-                                <div className="flex gap-2">
-                                    <Skeleton className="h-5 w-16 rounded-full" />
+
+                                {/* Pills Row */}
+                                <div className="flex flex-wrap gap-2">
+                                    <Skeleton className="h-5 w-28 rounded-full" />
                                     <Skeleton className="h-5 w-20 rounded-full" />
                                 </div>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-y border-border/50">
+
+                                {/* Posted date */}
+                                <Skeleton className="h-3 w-32" />
+                            </div>
+
+                            {/* Desktop Skeleton */}
+                            <div className="hidden md:block">
+                                <CardHeader>
+                                    <div className="flex justify-between items-start">
+                                        <div className="flex gap-4 items-center">
+                                            {/* Company Icon */}
+                                            <Skeleton className="h-12 w-12 rounded-lg shrink-0" />
+                                            <div className="space-y-2">
+                                                <Skeleton className="h-5 w-48" />
+                                                <div className="flex items-center gap-2">
+                                                    <Skeleton className="h-3.5 w-3.5" />
+                                                    <Skeleton className="h-4 w-24" />
+                                                    <Skeleton className="h-3 w-2" />
+                                                    <Skeleton className="h-3 w-20" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <Skeleton className="h-9 w-28 rounded-md" />
+                                    </div>
+                                </CardHeader>
+
+                                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-t border-border/50">
                                     {[1, 2, 3, 4].map((j) => (
                                         <div key={j} className="space-y-1">
-                                            <Skeleton className="h-3 w-12" />
-                                            <Skeleton className="h-4 w-20" />
+                                            <div className="flex items-center gap-1.5">
+                                                <Skeleton className="h-3.5 w-3.5" />
+                                                <Skeleton className="h-3 w-12" />
+                                            </div>
+                                            <Skeleton className="h-4 w-24" />
                                         </div>
                                     ))}
-                                </div>
-                            </CardContent>
-                            <CardFooter className="p-5 pt-0 flex items-center justify-between">
-                                <Skeleton className="h-3 w-40" />
-                                <div className="flex gap-3">
-                                    <Skeleton className="h-9 w-24 rounded-md" />
-                                    <Skeleton className="h-9 w-24 rounded-md" />
-                                </div>
-                            </CardFooter>
+                                </CardContent>
+                            </div>
                         </Card>
                     ))}
                 </div>

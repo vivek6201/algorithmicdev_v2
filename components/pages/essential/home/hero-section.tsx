@@ -13,7 +13,7 @@ const categories = [
     { name: 'Tutorials', icon: <Code2 className="w-4 h-4" />, href: '/tutorials' },
     { name: 'Find Jobs', icon: <Search className="w-4 h-4" />, href: '/jobs' },
     { name: 'Read Blogs', icon: <Terminal className="w-4 h-4" />, href: '/blogs' },
-    { name: 'Hire Talent', icon: <Rocket className="w-4 h-4" />, href: '/jobs/hire' },
+    // { name: 'Hire Talent', icon: <Rocket className="w-4 h-4" />, href: '/jobs/hire' },
 ];
 
 const skills = ['React', 'Python', 'Machine Learning', 'Data Science', 'Node.js', 'Flutter'];
@@ -64,8 +64,8 @@ export default function HeroSection() {
                     {/* Headline */}
                     <div className="space-y-4">
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1]">
-                            Master <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">Code</span> <br />
-                            Launch your <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-pink-500">Career</span>
+                            Master <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">Code </span> & <br />
+                            Start your <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-pink-500">Career</span>
                         </h1>
 
                         <div className="text-lg sm:text-xl text-muted-foreground flex flex-wrap items-center justify-center xl:justify-start gap-2 h-8">

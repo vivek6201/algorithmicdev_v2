@@ -1,8 +1,11 @@
-import Header from "@/components/pages/dashboard/header";
-import Sidebar from "@/components/pages/dashboard/sidebar";
-import MobileNav from "@/components/pages/dashboard/mobile-nav";
-import { sidebarItems } from "@/lib/constants";
-import Footer from "@/components/pages/essential/footer";
+import { lazyLoad } from "@/lib/lazy";
+import { sidebarItems } from "@/lib/utils/constants";
+import type { SidebarItemType } from "@/components/pages/dashboard/sidebar";
+
+const Header = lazyLoad(() => import("@/components/pages/dashboard/header"));
+const Sidebar = lazyLoad<{ items: SidebarItemType[]; className?: string }>(() => import("@/components/pages/dashboard/sidebar"));
+const MobileNav = lazyLoad(() => import("@/components/pages/dashboard/mobile-nav"));
+const Footer = lazyLoad(() => import("@/components/pages/essential/footer"));
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return <div className="h-full flex w-full">

@@ -5,7 +5,6 @@ import { CircleCheck, CircleX, Loader } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 
-
 export default function VerifyEmailClient() {
     const searchParams = useSearchParams()
     const token = searchParams.get("token")

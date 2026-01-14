@@ -85,7 +85,7 @@ export const authConfig: NextAuthConfig = {
                     accessToken: data.tokens.access_token,
                     emailVerified: null,
                     refreshToken: data.tokens.refresh_token,
-                    expiresAt: new Date(data.tokens.expires_in).getTime()
+                    expiresAt: data.tokens.expires_in
                 }
             }
         })
@@ -124,5 +124,6 @@ export const authConfig: NextAuthConfig = {
             }
             return session
         }
-    }
+    },
+    secret: process.env.AUTH_SECRET
 }

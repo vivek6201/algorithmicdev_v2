@@ -28,7 +28,7 @@ import { signOut, useSession } from "next-auth/react";
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Features", href: "#features" },
-  { name: "FAQ", href: "#faq" },
+  { name: "Tutorials", href: "/tutorials" },
   { name: "Blogs", href: "/blogs" },
   { name: "Jobs", href: "/jobs" },
 ];
@@ -40,6 +40,8 @@ export default function Header() {
   const { data: session } = useSession();
 
   const { user } = useUserStore();
+
+  console.log({ user });
 
   // Detect scroll to change background style
   useMotionValueEvent(scrollY, "change", (latest) => {

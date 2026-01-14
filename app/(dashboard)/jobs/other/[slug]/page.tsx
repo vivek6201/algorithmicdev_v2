@@ -1,8 +1,8 @@
 import { fetchJobDetail } from "@/lib/routes/jobs";
-import JobDescription from "@/components/pages/dashboard/jobs/job-description";
 import { Metadata } from "next";
 import { formatDate } from "@/lib/utils";
 import JobHeaderActions from "@/components/pages/dashboard/jobs/job-header-actions";
+import ContentRenderer from "@/components/pages/dashboard/content-renderer";
 
 async function getData(slug: string) {
     const response = await fetchJobDetail(slug)
@@ -92,7 +92,7 @@ async function page({ params }: { params: Promise<{ slug: string }> }) {
                 </div>
             </div>
 
-            <JobDescription description={job.description} />
+            <ContentRenderer content={job.description} />
         </>
     )
 }

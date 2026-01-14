@@ -1,7 +1,9 @@
 "use client"
 
-import Footer from "@/components/pages/essential/footer";
-import Header from "@/components/pages/essential/header";
+import { lazyLoad } from "@/lib/lazy";
+
+const Footer = lazyLoad(() => import("@/components/pages/essential/footer"));
+const Header = lazyLoad(() => import("@/components/pages/essential/header"));
 
 function MainLayout({
     children,

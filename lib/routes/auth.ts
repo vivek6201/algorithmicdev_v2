@@ -1,8 +1,9 @@
 import { LoginFormValues, SignupInput } from "@/validations/auth";
-import { apiClient } from "../api";
+
 import { BaseResponse } from "@/types/base";
 import { AxiosError } from "axios";
 import { LoginResponse, UserProfile } from "@/types/user";
+import { apiClient } from "../utils/api";
 
 export const loginUser = async (values: LoginFormValues) => {
     const payload = {

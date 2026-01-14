@@ -10,8 +10,10 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { LoginForm } from "./login-form"
-import { SignupForm } from "./signup-form"
+import { lazyLoadClient } from "@/lib/lazy";
+
+const LoginForm = lazyLoadClient(() => import("./login-form").then(mod => ({ default: mod.LoginForm })));
+const SignupForm = lazyLoadClient(() => import("./signup-form").then(mod => ({ default: mod.SignupForm })));
 
 export function AuthCard() {
     const pathname = usePathname()
@@ -19,7 +21,6 @@ export function AuthCard() {
     const isLogin = pathname === "/login"
     const paramsString = searchParams.toString()
     const queryString = paramsString ? `?${paramsString}` : ""
-
 
     return (
         <Card className="w-full max-w-md mx-auto">

@@ -24,6 +24,8 @@ export interface Job {
     job_type: JobType;
     min_salary: number;
     max_salary: number;
+    min_experience: string;
+    max_experience: string;
     categories?: Category[];
     listing_type: ListingType;
     created_at: string;

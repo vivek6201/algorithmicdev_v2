@@ -9,7 +9,7 @@ interface RefreshTokenResponse {
     tokens: {
         access_token: string;
         refresh_token: string;
-        expires_in: string;
+        expires_in: number;
     };
 }
 
@@ -31,7 +31,7 @@ export async function refreshAccessToken(token: JWT): Promise<JWT> {
             ...token,
             accessToken: data.tokens.access_token,
             refreshToken: data.tokens.refresh_token,
-            expiresAt: new Date(data.tokens.expires_in).getTime(),
+            expiresAt: data.tokens.expires_in,
             error: undefined // Clear any error
         };
     } catch (error) {

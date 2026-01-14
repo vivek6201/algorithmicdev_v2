@@ -13,11 +13,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/auth";
 import { useUserStore } from "@/store/user";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
-  const { isAuthenticated, user } = useUserStore();
+  const { user } = useUserStore();
   const { logout } = useAuth();
+  const pathname = usePathname();
+  const session = useSession();
 
   return (
     <div className="h-16 flex items-center justify-between p-4  border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 sticky top-0 z-50">
@@ -28,14 +32,14 @@ export default function Header() {
       </Link>
       <div className="flex gap-2 items-center">
         <ThemeToggler />
-        {isAuthenticated ? (
+        {session.data?.user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="h-9 w-9 cursor-pointer">
                 <AvatarFallback className="text-sm">
                   {(user?.name || user?.email || "U")
                     .split(" ")
-                    .map((n: string) => n[0])
+                    .map((n) => n[0])
                     .join("")
                     .toUpperCase()}
                 </AvatarFallback>
@@ -53,7 +57,7 @@ export default function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Link href="/login">
+          <Link href={`/login?redirect=${pathname}`}>
             <Button size="sm" className="rounded-full h-9 px-5">
               Get Started
             </Button>

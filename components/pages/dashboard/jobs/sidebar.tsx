@@ -1,6 +1,6 @@
 "use client"
 
-import { jobSidebarItems } from "@/lib/constants"
+import { jobSidebarItems } from "@/lib/utils/constants"
 import { SidebarItemType } from "../sidebar"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
