@@ -1,14 +1,12 @@
 "use server"
 
 import { fetchCurrentUser } from "@/lib/routes/auth"
-import { cookies } from "next/headers"
+import { auth } from "@/lib/auth"
 
 export const getUser = async () => {
-    const cookieStore = await cookies()
-    const access_token = cookieStore.get("access_token")?.value
-    const refresh_token = cookieStore.get("refresh_token")?.value
+    const session = await auth()
 
-    if (!access_token && !refresh_token) {
+    if (!session || !session.user) {
         return null
     }
 

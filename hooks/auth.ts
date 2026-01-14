@@ -3,6 +3,7 @@
 import { getUser } from "@/actions/user"
 import { logoutUser } from "@/lib/routes/auth"
 import { useUserStore } from "@/store/user"
+import { signOut } from "next-auth/react"
 
 export const useAuth = () => {
     const { setUser, clearUser, setLoading } = useUserStore()
@@ -29,6 +30,7 @@ export const useAuth = () => {
         const data = await logoutUser()
         if (data.success) {
             clearUser()
+            await signOut()
         }
     }
 

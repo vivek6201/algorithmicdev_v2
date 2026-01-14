@@ -1,7 +1,9 @@
 import { LoginFormValues, SignupInput } from "@/validations/auth";
-import { apiClient } from "../utils/api";
-import { BaseResponse, UserProfile, User } from "@/types/base";
+
+import { BaseResponse } from "@/types/base";
 import { AxiosError } from "axios";
+import { LoginResponse, UserProfile } from "@/types/user";
+import { apiClient } from "../utils/api";
 
 export const loginUser = async (values: LoginFormValues) => {
     const payload = {
@@ -11,7 +13,7 @@ export const loginUser = async (values: LoginFormValues) => {
     }
 
     try {
-        const { data } = await apiClient<BaseResponse<User>>({
+        const { data } = await apiClient<BaseResponse<LoginResponse>>({
             endpoint: "/api/auth/login",
             method: "POST",
             body: payload,
@@ -35,7 +37,7 @@ export const signupUser = async (values: SignupInput) => {
     }
 
     try {
-        const { data } = await apiClient<BaseResponse<User>>({
+        const { data } = await apiClient<BaseResponse<null>>({
             endpoint: "/api/auth/signup",
             method: "POST",
             body: payload,
