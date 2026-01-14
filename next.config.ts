@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       hostname: "d1s05seu32cxps.cloudfront.net"
     }]
   },
+  output: "standalone"
 };
 
 export default nextConfig;
